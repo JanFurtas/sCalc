@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 public class calcWindow extends JFrame {
 
-    private JTextField display;
+    private JLabel display;
     private calcLogic logic = new calcLogic();
 
     // Speicher für die Rechnung
@@ -19,18 +19,45 @@ public class calcWindow extends JFrame {
 
     public calcWindow() {
         setTitle("sCalc");
-        setSize(300, 400);
+        setSize(450, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+        setBackground(Color.decode("#5A5A75"));
 
-        display = new JTextField();
-        display.setEditable(false); //TODO Erstmal nur eingabe durch Buttons in Zukunft auch durch Tastatur
+
+        display = new JLabel("");
+        display.setOpaque(true);
         display.setFont(new Font("Arial", Font.BOLD, 24));
         display.setHorizontalAlignment(JTextField.RIGHT);
+        display.setPreferredSize(new Dimension(225,150));
+        display.setBackground(Color.decode("#5A5A75"));
+        display.setForeground(Color.white);
+        display.setHorizontalAlignment(JLabel.RIGHT);
+        display.setVerticalAlignment(JLabel.BOTTOM);
+        display.setBorder(BorderFactory.createEmptyBorder(0,0,15,15));
+        display.setLayout(new BorderLayout());
         add(display, BorderLayout.NORTH);
+
+        JButton historyBtn = new JButton("\uD83D\uDD52");
+        historyBtn.setBorderPainted(false);
+        historyBtn.setContentAreaFilled(false);
+        historyBtn.setFocusPainted(false);
+        historyBtn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28));
+        historyBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        historyBtn.setForeground(Color.WHITE);
+        historyBtn.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this, "Kommt");
+        });
+
+        JPanel buttonContainer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5,0));
+        buttonContainer.setOpaque(false);
+        buttonContainer.add(historyBtn);
+
+        display.add(buttonContainer, BorderLayout.NORTH);
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 4));
+        panel.setBackground(Color.decode("#2E2E2E"));
 
         // Beschriftungen für die Tasten
         String[] buttons = {
@@ -41,8 +68,11 @@ public class calcWindow extends JFrame {
         };
 
         for (String text : buttons) {
-            JButton button = new JButton(text);
+            RoundedButton button = new RoundedButton(text);
             button.setFont(new Font("Arial", Font.BOLD, 20));
+            button.setForeground(Color.white);
+            button.setBackground(Color.decode("#3D3D4F"));
+            button.setBorderPainted(true);
 
             button.addActionListener(new ButtonClickListener());
             panel.add(button);
