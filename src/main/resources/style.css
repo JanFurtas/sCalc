@@ -1,0 +1,45 @@
+.root{
+    -fx-background-color: #5A5A75;
+    -fx-font-family: Arial;
+}
+
+.display-label{
+    -fx-background-color: #5A5A75;
+    -fx-text-fill: white;
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 20 10 0;
+}
+
+.button-grid{
+    -fx-background-color: #2E2E2E;
+    -fx-padding: 10;
+    -fx-hgap: 5;
+    -fx-vgap: 5;
+}
+
+.calc-button{
+    -fx-background-color: #3D3D4F;
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-min-height: 60;
+    -fx-min-width: 60;
+    -fx-cursor: hand;
+}
+
+.calc-button:hover {
+    -fx-background-color: #4D4D6F;
+}
+
+.calc-button:pressed {
+    -fx-background-color: #6D6D8F;
+}
+
+.history-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+    -fx-cursor: hand;
+}

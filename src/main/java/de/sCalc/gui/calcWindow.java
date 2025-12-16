@@ -1,65 +1,55 @@
 package de.sCalc.gui;
 
 import de.sCalc.logic.calcLogic;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
-public class calcWindow extends JFrame {
+public class calcWindow extends Application {
 
-    private JLabel display;
+    private Label display;
     private calcLogic logic = new calcLogic();
 
     // Speicher für die Rechnung
     private BigDecimal firstNumber = null;
     private String operator = "";
     private boolean restart = true;
+    private ArrayList<String> calcHistory = new ArrayList<>();
 
-    public calcWindow() {
-        setTitle("sCalc");
-        setSize(450, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
-        setBackground(Color.decode("#5A5A75"));
+    @Override
+    public void start(Stage primaryStage) {
+        BorderPane root = new BorderPane();
 
+        VBox topCointainer = new VBox();
+        Button historyBtn = new Button("\uD83D\uDD52");
+        historyBtn.getStyleClass().add("history-button");
+        historyBtn.setOnAction(e -> showCalcHistory());
 
-        display = new JLabel("");
-        display.setOpaque(true);
-        display.setFont(new Font("Arial", Font.BOLD, 24));
-        display.setHorizontalAlignment(JTextField.RIGHT);
-        display.setPreferredSize(new Dimension(225,150));
-        display.setBackground(Color.decode("#5A5A75"));
-        display.setForeground(Color.white);
-        display.setHorizontalAlignment(JLabel.RIGHT);
-        display.setVerticalAlignment(JLabel.BOTTOM);
-        display.setBorder(BorderFactory.createEmptyBorder(0,0,15,15));
-        display.setLayout(new BorderLayout());
-        add(display, BorderLayout.NORTH);
+        HBox historyContainer = new HBox(historyBtn);
+        historyContainer.setAlignment(Pos.CENTER_LEFT);
+        historyContainer.setPadding(new javafx.geometry.Insets(3, 3, 0, 0));
 
-        JButton historyBtn = new JButton("\uD83D\uDD52");
-        historyBtn.setBorderPainted(false);
-        historyBtn.setContentAreaFilled(false);
-        historyBtn.setFocusPainted(false);
-        historyBtn.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28));
-        historyBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        historyBtn.setForeground(Color.WHITE);
-        historyBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Kommt");
-        });
+        display = new Label("");
+        display.getStyleClass().add("display-label");
+        display.setMaxWidth(Double.MAX_VALUE);
+        display.setAlignment(Pos.BOTTOM_RIGHT);
+        display.setPrefHeight(150);
 
-        JPanel buttonContainer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5,0));
-        buttonContainer.setOpaque(false);
-        buttonContainer.add(historyBtn);
+        topCointainer.getChildren().addAll(historyContainer, display);
+        root.setTop(topCointainer);
 
-        display.add(buttonContainer, BorderLayout.NORTH);
+        GridPane grid = new GridPane();
+        grid.getStyleClass().add("button-grid");
+        grid.setAlignment(Pos.CENTER);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 4));
-        panel.setBackground(Color.decode("#2E2E2E"));
-
-        // Beschriftungen für die Tasten
         String[] buttons = {
                 "7", "8", "9", "/",
                 "4", "5", "6", "*",
@@ -67,77 +57,113 @@ public class calcWindow extends JFrame {
                 "0", "C", "=", "+"
         };
 
-        for (String text : buttons) {
-            RoundedButton button = new RoundedButton(text);
-            button.setFont(new Font("Arial", Font.BOLD, 20));
-            button.setForeground(Color.white);
-            button.setBackground(Color.decode("#3D3D4F"));
-            button.setBorderPainted(true);
+        int col = 0;
+        int row = 0;
 
-            button.addActionListener(new ButtonClickListener());
-            panel.add(button);
+        for (String text : buttons) {
+            Button calcBtn = new Button(text);
+            calcBtn.getStyleClass().add("calc-button");
+            calcBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            GridPane.setHgrow(calcBtn, Priority.ALWAYS);
+            GridPane.setVgrow(calcBtn, Priority.ALWAYS);
+
+            calcBtn.setOnAction(e -> handleButtonClick(text));
+
+            grid.add(calcBtn, col, row);
+            col++;
+            if (col == 4) {
+                col = 0;
+                row++;
+            }
+        }
+        root.setCenter(grid);
+
+        Scene scene = new Scene(root, 400, 600);
+        try {
+            String cssPath = getClass().getResource("/style.css").toExternalForm();
+            scene.getStylesheets().add(cssPath);
+        } catch (Exception e) {
+            System.err.println("Fehler: style.css wurde nicht in 'resources' gefunden!");
         }
 
-        add(panel, BorderLayout.CENTER);
-
-        setVisible(true);
+        primaryStage.setTitle("sCalc");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
-    private class ButtonClickListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent event) {
-            String command = event.getActionCommand();
+    private void handleButtonClick(String command) {
+        if (command.equals("C")) {
+            display.setText("");
+            firstNumber = null;
+            operator = "";
+            restart = true;
+        } else if (command.equals("=")) {
+            if (firstNumber != null && !operator.isEmpty()) {
+                try {
+                    String currentText = display.getText();
+                    if (currentText.isEmpty()) return;
 
-            if (command.equals("C")){
-                display.setText("");
-                firstNumber = null;
-                operator = "";
-                restart = true;
-            } else if (command.equals("=")) {
-                if (firstNumber != null && !operator.isEmpty()){
-                    try{
-                        BigDecimal secondNumber = new BigDecimal(display.getText());
-                        BigDecimal result = BigDecimal.ZERO;
+                    BigDecimal secondNumber = new BigDecimal(currentText);
+                    BigDecimal result = BigDecimal.ZERO;
 
-                        switch (operator){
-                            case "+":
-                                result = logic.add(firstNumber, secondNumber);
-                                break;
-                            case "-":
-                                result = logic.sub(firstNumber, secondNumber);
-                                break;
-                            case "*":
-                                result = logic.multiply(firstNumber, secondNumber);
-                                break;
-                            case "/":
-                                result = logic.divide(firstNumber, secondNumber);
-                                break;
-                        }
-                        display.setText(result.toString());
-
-                        restart = true;
-                        firstNumber = null;
-                        operator = "";
-                    } catch (Exception ex){
-                        display.setText("Error");
-                        restart = true;
+                    switch (operator) {
+                        case "+":
+                            result = logic.add(firstNumber, secondNumber);
+                            break;
+                        case "-":
+                            result = logic.sub(firstNumber, secondNumber);
+                            break;
+                        case "*":
+                            result = logic.multiply(firstNumber, secondNumber);
+                            break;
+                        case "/":
+                            result = logic.divide(firstNumber, secondNumber);
+                            break;
                     }
-                }
 
-            }
-            else if ("+-*/".contains(command)){
-                if(!display.getText().isEmpty()){
-                    firstNumber = new BigDecimal(display.getText());
-                    operator = command;
+                    String rechnung = firstNumber + " " + operator + " " + secondNumber + " = " + result;
+                    calcHistory.add(rechnung);
+
+                    display.setText(result.toString());
+                    restart = true;
+                    firstNumber = null;
+                    operator = "";
+                } catch (Exception ex) {
+                    display.setText("Error");
                     restart = true;
                 }
+            }
+        } else if ("+-*/".contains(command)) {
+            if (!display.getText().isEmpty()) {
+                firstNumber = new BigDecimal(display.getText());
+                operator = command;
+                restart = true;
+            }
+        } else {
+            if (restart) {
+                display.setText(command);
+                restart = false;
             } else {
-                if (restart){
-                    display.setText(command);
-                    restart = false;
-                } else display.setText(display.getText() + command);
+                display.setText(display.getText() + command);
             }
         }
 
+    }
+
+    private void showCalcHistory(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Verlauf");
+        alert.setHeaderText("Letzte Rechnungen:");
+
+        StringBuilder historyContent = new StringBuilder();
+        if (calcHistory.isEmpty()){
+            historyContent.append("Noch keine Rechnungen vorhanden.");
+        } else {
+            for (String entry : calcHistory){
+                historyContent.append(entry).append("\n");
+            }
+        }
+        alert.setContentText(historyContent.toString());
+        alert.showAndWait();
     }
 }
