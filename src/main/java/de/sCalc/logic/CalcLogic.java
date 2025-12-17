@@ -3,7 +3,7 @@ package de.sCalc.logic;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-public class calcLogic {
+public class CalcLogic {
     public BigDecimal output;
 
     public BigDecimal add(BigDecimal input1, BigDecimal input2){

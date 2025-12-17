@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 
 class calcLogicTest {
-    calcLogic calculator = new calcLogic();
+    CalcLogic calculator = new CalcLogic();
 
     @Test
     void testAdd() {

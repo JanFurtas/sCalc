@@ -1,3 +1,4 @@
+/* Calculator Frame */
 .root{
     -fx-background-color: #5A5A75;
     -fx-font-family: Arial;
@@ -42,4 +43,29 @@
     -fx-text-fill: white;
     -fx-font-size: 30px;
     -fx-cursor: hand;
+}
+
+/* History Frame */
+.dialog-pane{
+    -fx-background-color: #2E2E2E;
+}
+.dialog-pane .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #3D3D4F;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #5A5A75;
+    -fx-text-fill: white;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #6D6D8F;
 }
