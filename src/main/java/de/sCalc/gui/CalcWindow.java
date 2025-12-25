@@ -24,10 +24,18 @@ public class CalcWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        LoginWindow loginWindow = new LoginWindow(() -> {
+            showCalculatorUI(primaryStage);
+        });
+
+        loginWindow.show(primaryStage);
+
+    }
+
+    private void showCalculatorUI(Stage primaryStage){
         BorderPane root = new BorderPane();
 
         root.setTop(createDisplayArea());
-
         root.setCenter(createKeyPad());
 
         Scene scene = new Scene(root, 400, 600);
@@ -36,8 +44,9 @@ public class CalcWindow extends Application {
 
         primaryStage.setTitle("sCalc");
         primaryStage.setScene(scene);
-        primaryStage.show();
 
+        primaryStage.centerOnScreen();
+        primaryStage.show();
     }
 
     private VBox createDisplayArea() {

@@ -69,3 +69,22 @@
 .dialog-pane .button:hover {
     -fx-background-color: #6D6D8F;
 }
+
+.text-field {
+    -fx-background-color: #3D3D4F;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #aaaaaa;
+    -fx-font-size: 14;
+    -fx-background-radius: 5;
+}
+
+.text-field:focused {
+    -fx-background-color: #4D4D6F;
+    -fx-border-color: #6D6D8F;
+    -fx-border-radius: 5;
+}
+
+.error-label{
+    -fx-text-fill: #ff6b6b;
+    -fx-font-size: 12;
+}
