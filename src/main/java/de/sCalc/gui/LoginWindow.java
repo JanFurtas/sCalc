@@ -1,22 +1,26 @@
 package de.sCalc.gui;
 
+import de.sCalc.logic.UserManager;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.awt.*;
+import java.sql.Date;
+import java.sql.SQLException;
 
 public class LoginWindow {
     private final Runnable onLoginSuccess;
+    private Date birthdate;
 
     public LoginWindow(Runnable onLoginSuccess){
         this.onLoginSuccess = onLoginSuccess;
     }
+
+    UserManager userManager = new UserManager();
 
     public void show(Stage stage){
         VBox root = new VBox(15);
@@ -26,8 +30,14 @@ public class LoginWindow {
         Label title = new Label("Anmeldung");
         title.setStyle("-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold");
 
-        javafx.scene.control.TextField userField = new TextField();
-        userField.setPromptText("Benutzername");
+        Region spacerBIG = new Region();
+        VBox.setVgrow(spacerBIG, Priority.ALWAYS);
+
+        Region spacerMID = new Region();
+        VBox.setVgrow(spacerMID, Priority.SOMETIMES);
+
+        TextField email = new TextField();
+        email.setPromptText("E-Mail");
 
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("Passwort");
@@ -37,20 +47,33 @@ public class LoginWindow {
 
         Button loginButton = new Button();
         loginButton.getStyleClass().add("calc-button");
-        loginButton.setText("Login");
+        loginButton.setText("Anmelden");
 
-        loginButton.setOnAction( e -> {
-            String user = userField.getText();
-            String passwd = passwordField.getText();
-
-            if (user.equals("admin") && passwd.equals("123")) {
-                onLoginSuccess.run();
-            } else {
-                errorLabel.setText("Falsche Logindaten");
-            }
+        Button registerButton = new Button();
+        registerButton.setText("Hier registrieren!");
+        registerButton.getStyleClass().add("login-register-dialog");
+        registerButton.setOnAction( e -> {
+            stage.close();
+            RegisterWindow registerWindow = new RegisterWindow(null);
+            Stage registerStage = new Stage();
+            registerWindow.show(registerStage);
         });
 
-        root.getChildren().addAll(title, userField, passwordField, loginButton, errorLabel);
+        loginButton.setOnAction( e -> {
+            String mail = email.getText();
+            String pwd = passwordField.getText();
+
+
+            if (mail.isEmpty() || pwd.isEmpty()){
+                errorLabel.setText("Bitte alle Felder ausfüllen.");
+            } else {
+                onLoginSuccess.run();
+            }
+
+
+        });
+
+        root.getChildren().addAll(spacerMID, email, passwordField, loginButton, errorLabel, spacerBIG, registerButton);
 
         Scene scene = new Scene(root, 300, 400);
 

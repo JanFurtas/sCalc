@@ -88,3 +88,36 @@
     -fx-text-fill: #ff6b6b;
     -fx-font-size: 12;
 }
+
+.date-picker{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+    -fx-background-radius: 5;
+    -fx-padding: 0;
+    -fx-max-width: Infinity;
+    -fx-min-height: 27;
+}
+
+.date-picker .text-field{
+    -fx-background-color: #3D3D4F;
+    -fx-background-radius: 5 0 0 5;
+    -fx-text-fill: white;
+    -fx-padding: 4 7 4 7;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #3D3D4F;
+    -fx-background-radius: 0 5 5 0;
+    -fx-border-color: #6D6D8F;
+    -fx-border-radius: 5;
+    -fx-padding: 0 10 0 10;
+}
+
+.login-register-dialog {
+    -fx-background-color: transparent;
+    -fx-text-fill: White;
+    -fx-cursor: hand;
+    -fx-max-width: Infinity;
+
+}
