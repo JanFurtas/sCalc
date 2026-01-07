@@ -10,3 +10,12 @@ public class Main {
         Application.launch(CalcWindow.class, args);
     }
 }
+
+//TODO Login funktion mit Email & Password
+//TODO Eingabefilter im Registriermenü
+
+//TODO Profil Menü im Rechner
+//TODO Account löschen funktion
+//TODO Bezahlmethode hinzufügen
+
+//TODO Premiumversion einbauen
