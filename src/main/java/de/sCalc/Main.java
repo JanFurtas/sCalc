@@ -11,7 +11,6 @@ public class Main {
     }
 }
 
-//TODO Login funktion mit Email & Password -> Mit eingetragenen daten
 //TODO Eingabefilter im Registriermenü
 
 //TODO Profil Menü im Rechner

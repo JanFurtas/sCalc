@@ -35,17 +35,18 @@ public class UserManager{
         return -1;
     }
 
-    public boolean fetchPassword(String email, String password) throws SQLException {
-        String sqlPWD = "SELECT password FROM users WHERE email = '"+email+"'";
-        try(Connection conn = Databasehandler.connect();
-            PreparedStatement getPWD = conn.prepareStatement(sqlPWD);){
-                ResultSet rs = getPWD.executeQuery();
-                if(rs.next()){
-                    System.out.println(rs.getString("password"));
-                }
+    public String fetchPassword(String email, String password) throws SQLException {
+        String sqlPWD = "SELECT password FROM users WHERE email = '" + email + "'";
+        String output = null;
+        try (Connection conn = Databasehandler.connect();
+             PreparedStatement getPWD = conn.prepareStatement(sqlPWD);) {
+            ResultSet rs = getPWD.executeQuery();
+            if (rs.next()) {
+                output = rs.getString("password");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return true; // TODO CHECKEN!!
+        return output;
     }
 }

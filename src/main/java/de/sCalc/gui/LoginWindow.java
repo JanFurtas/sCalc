@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.sql.*;
+import java.util.Objects;
 
 public class LoginWindow {
     private final Runnable onLoginSuccess;
@@ -68,17 +69,14 @@ public class LoginWindow {
                 errorLabel.setText("Bitte alle Felder ausfüllen.");
             } else {
                 try {
-                    if(userManager.fetchPassword(mail, pwd)){
-                        System.out.println("Yeah");
-                    } else {
-                        System.out.println("No");
-                    }
-
-
+                     if(Objects.equals(userManager.fetchPassword(mail, pwd), pwd)){
+                         onLoginSuccess.run();
+                     } else {
+                         errorLabel.setText("Falsche Benutzerdaten");
+                     }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
-                onLoginSuccess.run();
             }
 
 
