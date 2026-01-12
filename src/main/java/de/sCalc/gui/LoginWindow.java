@@ -1,5 +1,6 @@
 package de.sCalc.gui;
 
+import de.sCalc.logic.Databasehandler;
 import de.sCalc.logic.UserManager;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,8 +10,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.Date;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class LoginWindow {
     private final Runnable onLoginSuccess;
@@ -67,6 +67,17 @@ public class LoginWindow {
             if (mail.isEmpty() || pwd.isEmpty()){
                 errorLabel.setText("Bitte alle Felder ausfüllen.");
             } else {
+                try {
+                    if(userManager.fetchPassword(mail, pwd)){
+                        System.out.println("Yeah");
+                    } else {
+                        System.out.println("No");
+                    }
+
+
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 onLoginSuccess.run();
             }
 
