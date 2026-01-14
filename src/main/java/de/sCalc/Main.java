@@ -11,9 +11,8 @@ public class Main {
     }
 }
 
-//TODO Eingabefilter im Registriermenü
 
-//TODO Profil Menü im Rechner
+//TODO Profil Menü im Rechner <-------
 //TODO Account löschen funktion
 //TODO Bezahlmethode hinzufügen
 

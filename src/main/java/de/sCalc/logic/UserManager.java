@@ -5,10 +5,10 @@ import java.sql.*;
 public class UserManager{
 
     public int registerUser(String name, String lastName, String email, String password, Date birthday) throws SQLException {
-        String sql = "INSERT INTO users(name, lastName, birthday, password, email) VALUES(?, ?, ?, ?, ?)";
+        String userInsert = "INSERT INTO users(name, lastName, birthday, password, email) VALUES(?, ?, ?, ?, ?)";
 
         try (Connection conn = Databasehandler.connect();
-            PreparedStatement pStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement pStatement = conn.prepareStatement(userInsert, Statement.RETURN_GENERATED_KEYS)) {
 
             pStatement.setString(1, name);
             pStatement.setString(2, lastName);
@@ -48,5 +48,22 @@ public class UserManager{
             throw new RuntimeException(e);
         }
         return output;
+    }
+
+    public boolean registerCheck(String email){
+        String checkUserSQL = "SELECT Count(*) FROM users WHERE email = '" + email + "'";
+        try (Connection conn = Databasehandler.connect();
+            PreparedStatement checkUser = conn.prepareStatement(checkUserSQL)){
+
+            ResultSet rs = checkUser.executeQuery();
+
+            if (rs.next()){
+                int anzahlMails = rs.getInt(1);
+                return anzahlMails > 0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 }

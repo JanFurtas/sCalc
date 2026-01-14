@@ -60,13 +60,26 @@ public class CalcWindow extends Application {
         historyContainer.setAlignment(Pos.CENTER_LEFT);
         historyContainer.setPadding(new javafx.geometry.Insets(3, 3, 0, 0));
 
+        Button profileBtn = new Button("\uD83D\uDC64");
+        profileBtn.getStyleClass().add("history-button");
+        profileBtn.setFocusTraversable(false);
+        profileBtn.setOnAction(e -> {
+            ProfileWindow profile = new ProfileWindow();
+            profile.show();
+        });
+
+        HBox profileContainer = new HBox(profileBtn);
+        profileContainer.setAlignment(Pos.CENTER_LEFT);
+        profileContainer.setPadding(new javafx.geometry.Insets(3, 3, 0, 0));
+
+
         display = new Label("");
         display.getStyleClass().add("display-label");
         display.setMaxWidth(Double.MAX_VALUE);
         display.setAlignment(Pos.BOTTOM_RIGHT);
         display.setPrefHeight(150);
 
-        topCointainer.getChildren().addAll(historyContainer, display);
+        topCointainer.getChildren().addAll(historyContainer, profileContainer, display);
         return topCointainer;
     }
 

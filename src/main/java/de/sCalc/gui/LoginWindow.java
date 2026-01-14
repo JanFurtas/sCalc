@@ -55,7 +55,7 @@ public class LoginWindow {
         registerButton.getStyleClass().add("login-register-dialog");
         registerButton.setOnAction( e -> {
             stage.close();
-            RegisterWindow registerWindow = new RegisterWindow(null);
+            RegisterWindow registerWindow = new RegisterWindow(this.onLoginSuccess);
             Stage registerStage = new Stage();
             registerWindow.show(registerStage);
         });

@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Objects;
 
 import de.sCalc.logic.UserManager;
 
@@ -81,12 +82,17 @@ public class RegisterWindow {
                 errorLabel.setText("Bitte alle Felder ausfüllen.");
             } else {
                 try {
-                    userManager.registerUser(preName, lName, mail, pwd, bday);
+                    if (userManager.registerCheck(mail)){
+                        errorLabel.setText("E-Mail ist schon vergeben!");
+                    } else {
 
-                    stage.close();
-                    LoginWindow loginWindow = new LoginWindow(onRegisterSuccess);
-                    Stage loginStage = new Stage();
-                    loginWindow.show(loginStage);
+                        userManager.registerUser(preName, lName, mail, pwd, bday);
+
+                        stage.close();
+                        LoginWindow loginWindow = new LoginWindow(this.onRegisterSuccess);
+                        Stage loginStage = new Stage();
+                        loginWindow.show(loginStage);
+                    }
 
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);

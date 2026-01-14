@@ -121,3 +121,7 @@
     -fx-max-width: Infinity;
 
 }
+
+.profileMenue {
+    -fx-background-color: #2E2E2E;
+}
